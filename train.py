@@ -6,7 +6,7 @@ from transformers import (
 from model_setup import setup_model_and_tokenizer
 from data_preparation import load_and_prepare_data
 import config
-
+import torch
 
 def train_model():
     """
