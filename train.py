@@ -53,7 +53,8 @@ def train_model():
         warmup_ratio=cfg.WARMUP_RATIO,  # 学习率预热
         lr_scheduler_type="cosine",  # 余弦学习率调度
         weight_decay=0.01,  # 权重衰减
-        remove_unused_columns=False  # 保留预处理添加的列
+        remove_unused_columns=False,  # 保留预处理添加的列
+
     )
 
     # 5. 创建Trainer对象

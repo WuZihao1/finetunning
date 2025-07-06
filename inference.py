@@ -41,8 +41,8 @@ def generate_marketing_copy():
     text_generator = pipeline(
         "text-generation",
         model=model,
-        tokenizer=tokenizer,
-        device=device if device != "cpu" else -1,
+        tokenizer=tokenizer
+        #device=device if device != "cpu" else -1,
     )
 
     # 3. 提示模板（必须与训练时一致）

@@ -21,6 +21,7 @@ def load_and_prepare_data():
     # 加载与模型匹配的分词器
     tokenizer = AutoTokenizer.from_pretrained(
         config.TrainingConfig.MODEL_NAME,
+        trust_remote_code=True,
         use_fast=True  # 使用Rust加速的快速分词器
     )
 

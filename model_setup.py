@@ -20,7 +20,10 @@ def setup_model_and_tokenizer():
     cfg = config.TrainingConfig
 
     # 1. 加载分词器
-    tokenizer = AutoTokenizer.from_pretrained(cfg.MODEL_NAME)
+    tokenizer = AutoTokenizer.from_pretrained(
+                        cfg.MODEL_NAME,
+                        trust_remote_code=True
+    )
     tokenizer.pad_token = tokenizer.eos_token  # 设置pad token
     tokenizer.padding_side = "right"  # 右侧填充，适配自回归生成
 
@@ -40,6 +43,7 @@ def setup_model_and_tokenizer():
     model = AutoModelForCausalLM.from_pretrained(
         cfg.MODEL_NAME,
         quantization_config=bnb_config,  # 量化配置
+        trust_remote_code = True,
         device_map="auto",  # 自动分配设备(GPU/CPU)
         torch_dtype=torch.bfloat16 if not cfg.QUANTIZE else None,  # 非量化时使用bfloat16
         use_cache=False  # 训练时不使用kv缓存，节省显存
@@ -50,12 +54,13 @@ def setup_model_and_tokenizer():
         # 根据模型架构选择目标模块
         # 这些模块将应用LoRA适配器
         target_modules = {
-            "bigscience/bloom": ["query_key_value", "dense", "dense_h_to_4h", "dense_4h_to_h"],
-            "gpt": ["q_proj", "k_proj", "v_proj", "out_proj"],
+            "bigscience/bloom-560m": ["query_key_value", "dense", "dense_h_to_4h", "dense_4h_to_h"],
+            "THUDM/chatglm3-6b-base": ["query_key_value"],
             "baichuan": ["W_pack", "o_proj", "gate_proj", "up_proj"],
             "qwen": ["c_attn", "c_proj"],
-            "default": ["query_key_value", "dense"]
-        }.get(cfg.MODEL_NAME.split('-')[0].lower(), "default")
+            "default": ["query_key_value", "dense"],
+            "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B": ["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
+        }.get(cfg.MODEL_NAME, "default")
 
         # 创建LoRA配置对象
         lora_config = LoraConfig(
@@ -64,7 +69,7 @@ def setup_model_and_tokenizer():
             target_modules=target_modules,  # 应用LoRA的目标层
             lora_dropout=0.05,  # LoRA层的Dropout率
             bias="none",  # 不训练偏置项
-            task_type="CAUSAL_LM"  # 因果语言建模任务
+            task_type="CAUSAL_LM",  # 因果语言建模任务
         )
 
         # 将模型转换为PEFT模型(添加LoRA适配器)
