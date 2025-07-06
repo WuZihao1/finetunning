@@ -42,7 +42,7 @@ def train_model():
         optim="paged_adamw_8bit" if cfg.QUANTIZE else "adamw_torch",  # 优化器
         logging_dir=cfg.LOGGING_DIR,  # 日志目录
         logging_steps=cfg.LOGGING_STEPS,  # 日志记录频率
-        evaluation_strategy="steps" if eval_dataset else "no",  # 评估策略
+        #evaluation_strategy="steps" if eval_dataset else "no",  # 评估策略
         eval_steps=cfg.EVAL_STEPS,  # 评估频率
         save_strategy="steps",  # 保存策略
         save_steps=cfg.SAVE_STEPS,  # 保存频率

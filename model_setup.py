@@ -50,7 +50,7 @@ def setup_model_and_tokenizer():
         # 根据模型架构选择目标模块
         # 这些模块将应用LoRA适配器
         target_modules = {
-            "bloom": ["query_key_value", "dense", "dense_h_to_4h", "dense_4h_to_h"],
+            "bigscience/bloom": ["query_key_value", "dense", "dense_h_to_4h", "dense_4h_to_h"],
             "gpt": ["q_proj", "k_proj", "v_proj", "out_proj"],
             "baichuan": ["W_pack", "o_proj", "gate_proj", "up_proj"],
             "qwen": ["c_attn", "c_proj"],

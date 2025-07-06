@@ -9,7 +9,7 @@
 
 class TrainingConfig:
     # 模型选择配置
-    MODEL_NAME = "bigscience/bloomz-560m"  # Hugging Face模型ID或本地路径
+    MODEL_NAME = "bigscience/bloom-560m"  # Hugging Face模型ID或本地路径
     USE_LORA = True  # 是否使用参数高效微调技术LoRA
     QUANTIZE = False  # 是否使用4-bit量化(QLoRA)减少显存占用
 
